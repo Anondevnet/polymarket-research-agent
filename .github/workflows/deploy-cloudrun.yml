@@ -1,0 +1,30 @@
+name: Deploy to Cloud Run
+
+# Manual trigger only. Requires Workload Identity Federation secrets:
+#   GCP_PROJECT_ID, GCP_REGION, GCP_WIF_PROVIDER, GCP_DEPLOY_SA
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/pm-research/api:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SA }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
+      - run: docker build -t "$IMAGE" . && docker push "$IMAGE"
+      - uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: pm-research-agent
+          region: ${{ secrets.GCP_REGION }}
+          image: ${{ env.IMAGE }}

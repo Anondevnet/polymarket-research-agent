@@ -1,0 +1,297 @@
+{
+  "n_markets": 30,
+  "horizon_days": 7,
+  "snapshot_created_at": "2026-11-21T23:01:18.239889+00:00",
+  "llm": "heuristic-lexicon",
+  "embedder": "hashing-512",
+  "base_rate_yes": 0.3,
+  "scores": {
+    "agent (heuristic-lexicon)": {
+      "brier": 0.2856,
+      "log_loss": 0.7713,
+      "ece": 0.2657
+    },
+    "market price @ as_of": {
+      "brier": 0.1781,
+      "log_loss": 0.5581,
+      "ece": 0.176
+    },
+    "baseline 0.5": {
+      "brier": 0.25,
+      "log_loss": 0.6931,
+      "ece": 0.2
+    }
+  },
+  "rows": [
+    {
+      "market_id": "511754",
+      "question": "Will Donald Trump be inaugurated?",
+      "as_of": "2025-01-13T12:00:00+00:00",
+      "n_docs": 25,
+      "agent": 0.7408,
+      "market": 0.9935,
+      "outcome": 1
+    },
+    {
+      "market_id": "507892",
+      "question": "Will the Sacramento Kings win the 2025 NBA Finals?",
+      "as_of": "2025-04-10T08:51:19+00:00",
+      "n_docs": 3,
+      "agent": 0.4134,
+      "market": 0.0005,
+      "outcome": 0
+    },
+    {
+      "market_id": "2169995",
+      "question": "MicroStrategy sells any Bitcoin by May 31, 2026?",
+      "as_of": "2026-05-28T00:34:19+00:00",
+      "n_docs": 4,
+      "agent": 0.5,
+      "market": 0.0705,
+      "outcome": 0
+    },
+    {
+      "market_id": "1640919",
+      "question": "US forces enter Iran by April 30?",
+      "as_of": "2026-04-02T00:28:21+00:00",
+      "n_docs": 25,
+      "agent": 0.5,
+      "market": 0.545,
+      "outcome": 1
+    },
+    {
+      "market_id": "546814",
+      "question": "Will Zelenskyy wear a suit before July?",
+      "as_of": "2025-06-23T12:00:00+00:00",
+      "n_docs": 0,
+      "agent": 0.5,
+      "market": 0.0375,
+      "outcome": 0
+    },
+    {
+      "market_id": "601697",
+      "question": "Fed decreases interest rates by 50+ bps after January 2026 meeting?",
+      "as_of": "2026-01-21T00:00:00+00:00",
+      "n_docs": 5,
+      "agent": 0.4134,
+      "market": 0.0015,
+      "outcome": 0
+    },
+    {
+      "market_id": "601700",
+      "question": "Fed increases interest rates by 25+ bps after January 2026 meeting?",
+      "as_of": "2026-01-21T00:00:00+00:00",
+      "n_docs": 10,
+      "agent": 0.5866,
+      "market": 0.0005,
+      "outcome": 0
+    },
+    {
+      "market_id": "2270330",
+      "question": "US x Iran permanent peace deal by June 15, 2026?",
+      "as_of": "2026-06-08T00:00:00+00:00",
+      "n_docs": 2,
+      "agent": 0.6682,
+      "market": 0.085,
+      "outcome": 1
+    },
+    {
+      "market_id": "558938",
+      "question": "Will Argentina win the 2026 FIFA World Cup?",
+      "as_of": "2026-07-13T00:00:00+00:00",
+      "n_docs": 8,
+      "agent": 0.5,
+      "market": 0.1825,
+      "outcome": 0
+    },
+    {
+      "market_id": "1706788",
+      "question": "US x Iran ceasefire by April 7?",
+      "as_of": "2026-03-31T00:00:00+00:00",
+      "n_docs": 0,
+      "agent": 0.5,
+      "market": 0.075,
+      "outcome": 1
+    },
+    {
+      "market_id": "654415",
+      "question": "Will the Fed increase interest rates by 25+ bps after the March 2026 meeting?",
+      "as_of": "2026-03-11T00:00:00+00:00",
+      "n_docs": 7,
+      "agent": 0.5866,
+      "market": 0.0025,
+      "outcome": 0
+    },
+    {
+      "market_id": "570360",
+      "question": "Fed decreases interest rates by 50+ bps after December 2025 meeting?",
+      "as_of": "2025-12-03T00:00:00+00:00",
+      "n_docs": 9,
+      "agent": 0.4134,
+      "market": 0.0075,
+      "outcome": 0
+    },
+    {
+      "market_id": "558968",
+      "question": "Will Egypt win the 2026 FIFA World Cup?",
+      "as_of": "2026-06-30T21:30:01+00:00",
+      "n_docs": 15,
+      "agent": 0.6682,
+      "market": 0.0015,
+      "outcome": 0
+    },
+    {
+      "market_id": "680392",
+      "question": "US government shutdown Saturday?",
+      "as_of": "2026-01-24T00:00:00+00:00",
+      "n_docs": 1,
+      "agent": 0.5,
+      "market": 0.085,
+      "outcome": 1
+    },
+    {
+      "market_id": "507894",
+      "question": "Will the Toronto Raptors win the 2025 NBA Finals?",
+      "as_of": "2025-03-26T06:13:03+00:00",
+      "n_docs": 6,
+      "agent": 0.5,
+      "market": 0.0005,
+      "outcome": 0
+    },
+    {
+      "market_id": "558963",
+      "question": "Will Morocco win the 2026 FIFA World Cup?",
+      "as_of": "2026-07-03T01:10:56+00:00",
+      "n_docs": 13,
+      "agent": 0.5,
+      "market": 0.0235,
+      "outcome": 0
+    },
+    {
+      "market_id": "558934",
+      "question": "Will Spain win the 2026 FIFA World Cup?",
+      "as_of": "2026-07-13T00:00:00+00:00",
+      "n_docs": 25,
+      "agent": 0.6682,
+      "market": 0.2055,
+      "outcome": 1
+    },
+    {
+      "market_id": "538932",
+      "question": "Will Zohran Mamdani win the 2025 NYC mayoral election?",
+      "as_of": "2025-10-28T12:00:00+00:00",
+      "n_docs": 4,
+      "agent": 0.5866,
+      "market": 0.8745,
+      "outcome": 1
+    },
+    {
+      "market_id": "558943",
+      "question": "Will USA win the 2026 FIFA World Cup?",
+      "as_of": "2026-06-30T05:08:19+00:00",
+      "n_docs": 42,
+      "agent": 0.7408,
+      "market": 0.0275,
+      "outcome": 0
+    },
+    {
+      "market_id": "1795527",
+      "question": "Russia x Ukraine ceasefire by May 31, 2026?",
+      "as_of": "2026-05-02T19:52:26+00:00",
+      "n_docs": 10,
+      "agent": 0.5,
+      "market": 0.0595,
+      "outcome": 1
+    },
+    {
+      "market_id": "503301",
+      "question": "Will the Panthers win Super Bowl 2025?",
+      "as_of": "2024-12-09T00:49:34+00:00",
+      "n_docs": 6,
+      "agent": 0.5866,
+      "market": 0.0005,
+      "outcome": 0
+    },
+    {
+      "market_id": "558945",
+      "question": "Will Mexico win the 2026 FIFA World Cup?",
+      "as_of": "2026-06-29T06:13:55+00:00",
+      "n_docs": 17,
+      "agent": 0.5866,
+      "market": 0.0125,
+      "outcome": 0
+    },
+    {
+      "market_id": "558951",
+      "question": "Will Norway win the 2026 FIFA World Cup?",
+      "as_of": "2026-07-05T02:58:20+00:00",
+      "n_docs": 13,
+      "agent": 0.5,
+      "market": 0.0165,
+      "outcome": 0
+    },
+    {
+      "market_id": "570363",
+      "question": "Fed increases interest rates by 25+ bps after December 2025 meeting?",
+      "as_of": "2025-12-03T00:00:00+00:00",
+      "n_docs": 17,
+      "agent": 0.5866,
+      "market": 0.0025,
+      "outcome": 0
+    },
+    {
+      "market_id": "507286",
+      "question": "Will Aston Villa win the UEFA Champions League?",
+      "as_of": "2025-04-09T00:18:15+00:00",
+      "n_docs": 9,
+      "agent": 0.6682,
+      "market": 0.0275,
+      "outcome": 0
+    },
+    {
+      "market_id": "558974",
+      "question": "Will Switzerland win the 2026 FIFA World Cup?",
+      "as_of": "2026-07-05T06:56:43+00:00",
+      "n_docs": 13,
+      "agent": 0.5,
+      "market": 0.0085,
+      "outcome": 0
+    },
+    {
+      "market_id": "558936",
+      "question": "Will France win the 2026 FIFA World Cup?",
+      "as_of": "2026-07-08T00:07:37+00:00",
+      "n_docs": 9,
+      "agent": 0.6682,
+      "market": 0.3305,
+      "outcome": 0
+    },
+    {
+      "market_id": "1180303",
+      "question": "Khamenei out as Supreme Leader of Iran by February 28?",
+      "as_of": "2026-02-21T00:00:00+00:00",
+      "n_docs": 1,
+      "agent": 0.5,
+      "market": 0.04,
+      "outcome": 1
+    },
+    {
+      "market_id": "507896",
+      "question": "Will the Washington Wizards win the 2025 NBA Finals?",
+      "as_of": "2025-03-15T04:46:37+00:00",
+      "n_docs": 7,
+      "agent": 0.5866,
+      "market": 0.0015,
+      "outcome": 0
+    },
+    {
+      "market_id": "507895",
+      "question": "Will the Utah Jazz win the 2025 NBA Finals?",
+      "as_of": "2025-03-04T06:37:23+00:00",
+      "n_docs": 9,
+      "agent": 0.8022,
+      "market": 0.0015,
+      "outcome": 0
+    }
+  ]
+}

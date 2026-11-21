@@ -1,0 +1,5 @@
+project_id      = "my-gcp-project"
+region          = "us-central1"
+image           = "us-central1-docker.pkg.dev/my-gcp-project/pm-research/api:latest"
+llm_provider    = "openai"
+invoker_members = ["user:you@example.com"]

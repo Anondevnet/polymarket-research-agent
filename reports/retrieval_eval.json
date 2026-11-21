@@ -1,0 +1,25 @@
+{
+  "embedder": "hashing-512",
+  "n_docs": 28,
+  "n_queries": 16,
+  "modes": {
+    "bm25": {
+      "recall@1": 0.625,
+      "recall@3": 0.875,
+      "recall@5": 0.9375,
+      "mrr": 0.8594
+    },
+    "dense": {
+      "recall@1": 0.4688,
+      "recall@3": 0.8125,
+      "recall@5": 0.875,
+      "mrr": 0.7396
+    },
+    "hybrid": {
+      "recall@1": 0.4688,
+      "recall@3": 0.875,
+      "recall@5": 0.9375,
+      "mrr": 0.7656
+    }
+  }
+}

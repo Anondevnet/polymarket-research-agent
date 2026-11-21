@@ -1,0 +1,16 @@
+{"query": "Will the Federal Reserve cut interest rates in September?", "relevant": ["fed-1", "fed-2"]}
+{"query": "Did strong employment data reduce expectations of Fed easing?", "relevant": ["fed-3"]}
+{"query": "Will Bitcoin reach $100k?", "relevant": ["btc-1"]}
+{"query": "bitcoin ETF inflows BlackRock", "relevant": ["btc-2"]}
+{"query": "crypto selloff liquidations bitcoin price drop", "relevant": ["btc-3"]}
+{"query": "Will ether ETFs be approved by the SEC?", "relevant": ["eth-1"]}
+{"query": "swing state polling challenger vs incumbent", "relevant": ["elec-1", "elec-3"]}
+{"query": "Who will win the UK general election, Labour or Conservatives?", "relevant": ["uk-1", "uk-2"]}
+{"query": "Will OpenAI release a new model?", "relevant": ["ai-1"]}
+{"query": "Who wins the NBA Finals, Celtics or Mavericks?", "relevant": ["nba-1", "nba-2"]}
+{"query": "Will OPEC+ extend output cuts?", "relevant": ["oil-1"]}
+{"query": "Will TikTok be banned in the US?", "relevant": ["tik-1", "tik-2"]}
+{"query": "Russia Ukraine ceasefire agreement", "relevant": ["ukr-1", "ukr-2"]}
+{"query": "Will the S&P 500 hit an all-time high?", "relevant": ["spx-1"]}
+{"query": "Nvidia largest company by market cap", "relevant": ["gpu-1"]}
+{"query": "Who will be elected the next pope?", "relevant": ["pope-1"]}
