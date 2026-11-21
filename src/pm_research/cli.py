@@ -62,7 +62,13 @@ def _cmd_eval_forecast(args: argparse.Namespace) -> None:
 
     snap = json.loads(Path(args.snapshot).read_text())
     # Offline replay: evidence comes from the snapshot, so no live sources are needed.
-    report = run_forecast_eval(ResearchService(sources=[]), snap, out_dir=args.out)
+    report = run_forecast_eval(
+        ResearchService(sources=[]),
+        snap,
+        out_dir=args.out,
+        knowledge_cutoff=args.knowledge_cutoff,
+        partial=args.partial,
+    )
     print(to_markdown(report))
 
 
@@ -116,6 +122,16 @@ def main(argv: list[str] | None = None) -> None:
     s = ev.add_parser("forecast", help="score forecasts on a snapshot (offline replay)")
     s.add_argument("--snapshot", default="data/eval/forecast_snapshot.json")
     s.add_argument("--out", default="reports")
+    s.add_argument(
+        "--knowledge-cutoff",
+        default=None,
+        help="ISO date; also score only markets forecast after the LLM's training cutoff",
+    )
+    s.add_argument(
+        "--partial",
+        action="store_true",
+        help="score only markets already checkpointed in <out>/rows.jsonl (no LLM calls)",
+    )
     s.set_defaults(func=_cmd_eval_forecast)
 
     args = p.parse_args(argv)

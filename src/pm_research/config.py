@@ -18,11 +18,14 @@ class Settings(BaseSettings):
     embedding_provider: Literal["hashing", "sentence-transformers", "openai"] = "hashing"
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dim: int = 512  # only used by the hashing embedder
-    llm_provider: Literal["heuristic", "openai"] = "heuristic"
+    llm_provider: Literal["heuristic", "openai", "gemini"] = "heuristic"
     llm_model: str = "gpt-4o-mini"
     llm_temperature: float = 0.0
+    llm_max_retries: int = 6  # retries on 429 / 5xx / connection errors (exp. backoff)
+    llm_min_interval_s: float = 0.0  # pacing between calls, e.g. 6.5 for a 10 RPM free tier
     openai_api_key: str | None = Field(default=None, validation_alias="OPENAI_API_KEY")
     openai_base_url: str | None = Field(default=None, validation_alias="OPENAI_BASE_URL")
+    gemini_api_key: str | None = Field(default=None, validation_alias="GEMINI_API_KEY")
 
     # Vector store / retrieval
     vector_store: Literal["qdrant", "memory"] = "qdrant"

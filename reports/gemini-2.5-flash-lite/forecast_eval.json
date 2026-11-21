@@ -1,0 +1,140 @@
+{
+  "n_markets": 8,
+  "n_markets_in_snapshot": 30,
+  "partial": true,
+  "horizon_days": 7,
+  "snapshot_created_at": "2026-11-21T23:01:18.239889+00:00",
+  "llm": "gemini-2.5-flash-lite",
+  "embedder": "hashing-512",
+  "base_rate_yes": 0.375,
+  "scores": {
+    "agent (gemini-2.5-flash-lite)": {
+      "brier": 0.1941,
+      "log_loss": 0.5988,
+      "ece": 0.3538
+    },
+    "market price @ as_of": {
+      "brier": 0.1313,
+      "log_loss": 0.3991,
+      "ece": 0.1583
+    },
+    "baseline 0.5": {
+      "brier": 0.25,
+      "log_loss": 0.6931,
+      "ece": 0.125
+    }
+  },
+  "n_llm_fallbacks": 0,
+  "rows": [
+    {
+      "market_id": "511754",
+      "question": "Will Donald Trump be inaugurated?",
+      "as_of": "2025-01-13T12:00:00+00:00",
+      "n_docs": 25,
+      "agent": 0.95,
+      "market": 0.9935,
+      "outcome": 1,
+      "rationale": "The evidence overwhelmingly points to Donald Trump being inaugurated as President. Multiple credible news sources are reporting on the event as a planned occurrence, discussing details like the prayer leader and expected proceedings. There is no evidence presented that suggests the inauguration will not happen. The resolution criteria are met by the current information, making a 'Yes' resolution highly probable.",
+      "llm": "gemini-2.5-flash-lite"
+    },
+    {
+      "market_id": "507892",
+      "question": "Will the Sacramento Kings win the 2025 NBA Finals?",
+      "as_of": "2025-04-10T08:51:19+00:00",
+      "n_docs": 3,
+      "agent": 0.02,
+      "market": 0.0005,
+      "outcome": 0,
+      "rationale": "The Sacramento Kings have historically struggled to achieve significant playoff success, and there is no current evidence to suggest a dramatic improvement leading to an NBA Championship in 2025. Without any positive indicators or strong team performance data, the probability remains extremely low. The provided evidence is irrelevant to the question of winning the finals. A base rate for a team with a history of underperformance winning the championship is very low.",
+      "llm": "gemini-2.5-flash-lite"
+    },
+    {
+      "market_id": "2169995",
+      "question": "MicroStrategy sells any Bitcoin by May 31, 2026?",
+      "as_of": "2026-05-28T00:34:19+00:00",
+      "n_docs": 4,
+      "agent": 0.35,
+      "market": 0.0705,
+      "outcome": 0,
+      "rationale": "The evidence suggests MicroStrategy is considering selling Bitcoin, as reported by Yahoo Finance and Seeking Alpha. However, the company's recent debt repurchase and continued large holdings indicate a strong commitment to Bitcoin. Without more concrete information on their strategic intentions or financial pressures, the probability of a sale remains below 50%. The resolution date is still over a year away, allowing for significant shifts in strategy or market conditions.",
+      "llm": "gemini-2.5-flash-lite"
+    },
+    {
+      "market_id": "1640919",
+      "question": "US forces enter Iran by April 30?",
+      "as_of": "2026-04-02T00:28:21+00:00",
+      "n_docs": 25,
+      "agent": 0.1,
+      "market": 0.545,
+      "outcome": 1,
+      "rationale": "The evidence suggests increased US military presence in the Middle East and escalating tensions with Iran, including discussions of ground war. However, there is no direct confirmation or credible reporting indicating that US military personnel have physically entered Iranian territory. The resolution criteria are very specific about terrestrial entry for operational purposes, excluding other scenarios. Without concrete evidence of such an incursion, the probability remains low.",
+      "llm": "gemini-2.5-flash-lite"
+    },
+    {
+      "market_id": "546814",
+      "question": "Will Zelenskyy wear a suit before July?",
+      "as_of": "2025-06-23T12:00:00+00:00",
+      "n_docs": 0,
+      "agent": 0.5,
+      "market": 0.0375,
+      "outcome": 0,
+      "rationale": "The resolution criteria require Zelenskyy to be photographed or videotaped wearing a suit between May 22 and June 30, 2025. As of the forecast date, there is no evidence either for or against this occurring. Given the lack of information and the relatively short timeframe, a neutral 50% probability is assigned, reflecting equal chances of either outcome.",
+      "llm": "gemini-2.5-flash-lite"
+    },
+    {
+      "market_id": "601697",
+      "question": "Fed decreases interest rates by 50+ bps after January 2026 meeting?",
+      "as_of": "2026-01-21T00:00:00+00:00",
+      "n_docs": 5,
+      "agent": 0.35,
+      "market": 0.0015,
+      "outcome": 0,
+      "rationale": "The question asks about a 50+ bps rate decrease after the January 2026 FOMC meeting. While there's evidence of a Fed official (Miran) advocating for large cuts (150 bps) in 2026, this is just one voice and doesn't guarantee such a large cut so early in the year. The FOMC's decisions are collective and depend on economic conditions closer to the meeting date. Without more consensus or forward guidance from the Fed, a 50+ bps cut in January 2026 seems less likely than smaller, more incremental adjustments. Therefore, the probability is set below 0.5.",
+      "llm": "gemini-2.5-flash-lite"
+    },
+    {
+      "market_id": "601700",
+      "question": "Fed increases interest rates by 25+ bps after January 2026 meeting?",
+      "as_of": "2026-01-21T00:00:00+00:00",
+      "n_docs": 10,
+      "agent": 0.35,
+      "market": 0.0005,
+      "outcome": 0,
+      "rationale": "The evidence is mixed, with some economists predicting rate hikes and others forecasting cuts or a steady approach. The presence of multiple sources suggesting rate cuts or holding patterns (UBS, J.P. Morgan, Barclays, Goldman, RBC, BusinessTech) weighs against a significant hike. While one source mentions rapid rises, the consensus leans away from a 25+ bps increase in January 2026.",
+      "llm": "gemini-2.5-flash-lite"
+    },
+    {
+      "market_id": "2270330",
+      "question": "US x Iran permanent peace deal by June 15, 2026?",
+      "as_of": "2026-06-08T00:00:00+00:00",
+      "n_docs": 2,
+      "agent": 0.65,
+      "market": 0.085,
+      "outcome": 1,
+      "rationale": "The evidence strongly suggests a peace deal is imminent, with reports indicating it's 'near' and could be finalized 'within days'. This significantly increases the probability from a low base rate. However, the resolution criteria require a definitive, formally adopted, or publicly confirmed agreement, which has not yet occurred. The possibility of negotiations faltering or the deal not meeting the 'permanent' criteria still exists, preventing a higher probability.",
+      "llm": "gemini-2.5-flash-lite"
+    }
+  ],
+  "knowledge_cutoff": "2025-01-31",
+  "post_cutoff": {
+    "n_markets": 7,
+    "base_rate_yes": 0.2857,
+    "scores": {
+      "agent (gemini-2.5-flash-lite)": {
+        "brier": 0.2215,
+        "log_loss": 0.677,
+        "ece": 0.3971
+      },
+      "market price @ as_of": {
+        "brier": 0.1501,
+        "log_loss": 0.4551,
+        "ece": 0.1799
+      },
+      "baseline 0.5": {
+        "brier": 0.25,
+        "log_loss": 0.6931,
+        "ece": 0.2143
+      }
+    }
+  }
+}

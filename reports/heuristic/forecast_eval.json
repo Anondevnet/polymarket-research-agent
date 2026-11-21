@@ -1,5 +1,7 @@
 {
   "n_markets": 30,
+  "n_markets_in_snapshot": 30,
+  "partial": false,
   "horizon_days": 7,
   "snapshot_created_at": "2026-11-21T23:01:18.239889+00:00",
   "llm": "heuristic-lexicon",
@@ -22,6 +24,7 @@
       "ece": 0.2
     }
   },
+  "n_llm_fallbacks": 0,
   "rows": [
     {
       "market_id": "511754",
@@ -30,7 +33,9 @@
       "n_docs": 25,
       "agent": 0.7408,
       "market": 0.9935,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +3 -> 0.74.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "507892",
@@ -39,7 +44,9 @@
       "n_docs": 3,
       "agent": 0.4134,
       "market": 0.0005,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance -1 -> 0.41.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "2169995",
@@ -48,7 +55,9 @@
       "n_docs": 4,
       "agent": 0.5,
       "market": 0.0705,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "1640919",
@@ -57,7 +66,9 @@
       "n_docs": 25,
       "agent": 0.5,
       "market": 0.545,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "546814",
@@ -66,7 +77,9 @@
       "n_docs": 0,
       "agent": 0.5,
       "market": 0.0375,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "601697",
@@ -75,7 +88,9 @@
       "n_docs": 5,
       "agent": 0.4134,
       "market": 0.0015,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance -1 -> 0.41.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "601700",
@@ -84,7 +99,9 @@
       "n_docs": 10,
       "agent": 0.5866,
       "market": 0.0005,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +1 -> 0.59.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "2270330",
@@ -93,7 +110,9 @@
       "n_docs": 2,
       "agent": 0.6682,
       "market": 0.085,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +2 -> 0.67.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558938",
@@ -102,7 +121,9 @@
       "n_docs": 8,
       "agent": 0.5,
       "market": 0.1825,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "1706788",
@@ -111,7 +132,9 @@
       "n_docs": 0,
       "agent": 0.5,
       "market": 0.075,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "654415",
@@ -120,7 +143,9 @@
       "n_docs": 7,
       "agent": 0.5866,
       "market": 0.0025,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +1 -> 0.59.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "570360",
@@ -129,7 +154,9 @@
       "n_docs": 9,
       "agent": 0.4134,
       "market": 0.0075,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance -1 -> 0.41.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558968",
@@ -138,7 +165,9 @@
       "n_docs": 15,
       "agent": 0.6682,
       "market": 0.0015,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +2 -> 0.67.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "680392",
@@ -147,7 +176,9 @@
       "n_docs": 1,
       "agent": 0.5,
       "market": 0.085,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "507894",
@@ -156,7 +187,9 @@
       "n_docs": 6,
       "agent": 0.5,
       "market": 0.0005,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558963",
@@ -165,7 +198,9 @@
       "n_docs": 13,
       "agent": 0.5,
       "market": 0.0235,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558934",
@@ -174,7 +209,9 @@
       "n_docs": 25,
       "agent": 0.6682,
       "market": 0.2055,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +2 -> 0.67.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "538932",
@@ -183,7 +220,9 @@
       "n_docs": 4,
       "agent": 0.5866,
       "market": 0.8745,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +1 -> 0.59.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558943",
@@ -192,7 +231,9 @@
       "n_docs": 42,
       "agent": 0.7408,
       "market": 0.0275,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +3 -> 0.74.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "1795527",
@@ -201,7 +242,9 @@
       "n_docs": 10,
       "agent": 0.5,
       "market": 0.0595,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "503301",
@@ -210,7 +253,9 @@
       "n_docs": 6,
       "agent": 0.5866,
       "market": 0.0005,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +1 -> 0.59.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558945",
@@ -219,7 +264,9 @@
       "n_docs": 17,
       "agent": 0.5866,
       "market": 0.0125,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +1 -> 0.59.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558951",
@@ -228,7 +275,9 @@
       "n_docs": 13,
       "agent": 0.5,
       "market": 0.0165,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "570363",
@@ -237,7 +286,9 @@
       "n_docs": 17,
       "agent": 0.5866,
       "market": 0.0025,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +1 -> 0.59.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "507286",
@@ -246,7 +297,9 @@
       "n_docs": 9,
       "agent": 0.6682,
       "market": 0.0275,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +2 -> 0.67.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558974",
@@ -255,7 +308,9 @@
       "n_docs": 13,
       "agent": 0.5,
       "market": 0.0085,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "558936",
@@ -264,7 +319,9 @@
       "n_docs": 9,
       "agent": 0.6682,
       "market": 0.3305,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +2 -> 0.67.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "1180303",
@@ -273,7 +330,9 @@
       "n_docs": 1,
       "agent": 0.5,
       "market": 0.04,
-      "outcome": 1
+      "outcome": 1,
+      "rationale": "Heuristic: prior 0.50, net stance +0 -> 0.50.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "507896",
@@ -282,7 +341,9 @@
       "n_docs": 7,
       "agent": 0.5866,
       "market": 0.0015,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +1 -> 0.59.",
+      "llm": "heuristic-lexicon"
     },
     {
       "market_id": "507895",
@@ -291,7 +352,31 @@
       "n_docs": 9,
       "agent": 0.8022,
       "market": 0.0015,
-      "outcome": 0
+      "outcome": 0,
+      "rationale": "Heuristic: prior 0.50, net stance +4 -> 0.80.",
+      "llm": "heuristic-lexicon"
     }
-  ]
+  ],
+  "knowledge_cutoff": "2025-01-31",
+  "post_cutoff": {
+    "n_markets": 28,
+    "base_rate_yes": 0.2857,
+    "scores": {
+      "agent (heuristic-lexicon)": {
+        "brier": 0.2913,
+        "log_loss": 0.7841,
+        "ece": 0.273
+      },
+      "market price @ as_of": {
+        "brier": 0.1908,
+        "log_loss": 0.5977,
+        "ece": 0.1883
+      },
+      "baseline 0.5": {
+        "brier": 0.25,
+        "log_loss": 0.6931,
+        "ece": 0.2143
+      }
+    }
+  }
 }

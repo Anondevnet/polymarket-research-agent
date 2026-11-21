@@ -7,8 +7,11 @@ deterministically in CI. It is a lexicon baseline and is labelled as such in eva
 from __future__ import annotations
 
 import json
+import logging
 import math
+import random
 import re
+import time
 from datetime import datetime
 from typing import Any, Protocol
 
@@ -16,6 +19,12 @@ from .config import Settings
 from .models import EvidenceSummary, Market, ScoredChunk
 from .prompts import ESTIMATE_SYSTEM, SUMMARIZE_SYSTEM, format_snippets
 from .tracing import span
+
+log = logging.getLogger(__name__)
+
+GEMINI_OPENAI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+GEMINI_DEFAULT_MODEL = "gemini-2.5-flash"
+FALLBACK_RATIONALE = "(fallback: unparseable LLM output, using 0.5)"
 
 POSITIVE = {
     "wins", "win", "won", "leads", "lead", "leading", "ahead", "surges", "surge", "soars",
@@ -111,7 +120,38 @@ def _parse_json(text: str) -> dict[str, Any]:
         return {}
 
 
-class OpenAIChatLLM:  # pragma: no cover - exercised with a fake client in tests
+def _retryable(exc: Exception) -> tuple[bool, float | None]:
+    """Is this a transient API error? Returns (retryable, server-suggested delay)."""
+    status = getattr(exc, "status_code", None)
+    if status is None:
+        status = getattr(getattr(exc, "response", None), "status_code", None)
+    name = type(exc).__name__
+    text = str(getattr(exc, "body", "") or exc)
+    if "per day" in text.lower() or "PerDay" in text:
+        return False, None  # daily quota: retrying within this run cannot succeed
+    transient = status in {408, 409, 429, 500, 502, 503, 504} or name in {
+        "APIConnectionError",
+        "APITimeoutError",
+        "RateLimitError",
+        "InternalServerError",
+    }
+    delay: float | None = None
+    headers = getattr(getattr(exc, "response", None), "headers", None) or {}
+    try:
+        if "retry-after" in headers:
+            delay = float(headers["retry-after"])
+    except (TypeError, ValueError):
+        delay = None
+    return transient, delay
+
+
+class OpenAIChatLLM:
+    """Any OpenAI-compatible chat endpoint (OpenAI, Gemini, Ollama, vLLM, xAI, ...).
+
+    Includes client-side pacing (``min_interval_s``) and exponential backoff with jitter on
+    429/5xx so it behaves on free-tier rate limits.
+    """
+
     def __init__(
         self,
         model: str,
@@ -119,19 +159,56 @@ class OpenAIChatLLM:  # pragma: no cover - exercised with a fake client in tests
         base_url: str | None = None,
         temperature: float = 0.0,
         client: Any = None,
+        max_retries: int = 6,
+        min_interval_s: float = 0.0,
+        backoff_base_s: float = 2.0,
+        backoff_max_s: float = 60.0,
+        sleep: Any = time.sleep,
     ) -> None:
         if client is None:
             from openai import OpenAI
 
-            client = OpenAI(api_key=api_key, base_url=base_url or None)
+            # Retries are handled here so pacing/backoff are explicit and traceable.
+            client = OpenAI(api_key=api_key, base_url=base_url or None, max_retries=0)
         self._client = client
         self.model = model
         self.temperature = temperature
         self.name = model
+        self.max_retries = max_retries
+        self.min_interval_s = min_interval_s
+        self.backoff_base_s = backoff_base_s
+        self.backoff_max_s = backoff_max_s
+        self._sleep = sleep
+        self._last_call = 0.0
+
+    def _create(self, **kwargs: Any) -> Any:
+        attempt = 0
+        while True:
+            wait = self.min_interval_s - (time.monotonic() - self._last_call)
+            if wait > 0:
+                self._sleep(wait)
+            self._last_call = time.monotonic()
+            try:
+                return self._client.chat.completions.create(**kwargs)
+            except Exception as exc:
+                transient, suggested = _retryable(exc)
+                if not transient or attempt >= self.max_retries:
+                    raise
+                backoff = min(self.backoff_max_s, self.backoff_base_s * 2**attempt)
+                delay = max(suggested or 0.0, backoff * (0.5 + random.random() / 2))
+                attempt += 1
+                log.warning(
+                    "LLM call failed (%s); retry %d/%d in %.1fs",
+                    type(exc).__name__,
+                    attempt,
+                    self.max_retries,
+                    delay,
+                )
+                self._sleep(delay)
 
     def _chat(self, name: str, system: str, user: str) -> dict[str, Any]:
         with span(name, as_type="generation", input=user, model=self.model) as s:
-            resp = self._client.chat.completions.create(
+            resp = self._create(
                 model=self.model,
                 temperature=self.temperature,
                 response_format={"type": "json_object"},
@@ -172,18 +249,34 @@ class OpenAIChatLLM:  # pragma: no cover - exercised with a fake client in tests
         )
         data = self._chat("estimate_probability", ESTIMATE_SYSTEM, user)
         try:
-            p = float(data.get("probability", 0.5))
-        except (TypeError, ValueError):
-            p = 0.5
+            p = float(data["probability"])
+        except (KeyError, TypeError, ValueError):
+            return 0.5, FALLBACK_RATIONALE
         return _clip(p), str(data.get("rationale", ""))
 
 
 def build_llm(settings: Settings) -> LLM:
+    common = {
+        "temperature": settings.llm_temperature,
+        "max_retries": settings.llm_max_retries,
+        "min_interval_s": settings.llm_min_interval_s,
+    }
+    if settings.llm_provider == "gemini":
+        # Gemini via its OpenAI-compatible endpoint; key from GEMINI_API_KEY.
+        model = settings.llm_model
+        if not model.startswith("gemini"):
+            model = GEMINI_DEFAULT_MODEL
+        return OpenAIChatLLM(
+            model,
+            settings.gemini_api_key or settings.openai_api_key,
+            settings.openai_base_url or GEMINI_OPENAI_BASE_URL,
+            **common,  # type: ignore[arg-type]
+        )
     if settings.llm_provider == "openai":
         return OpenAIChatLLM(
             settings.llm_model,
             settings.openai_api_key,
             settings.openai_base_url,
-            settings.llm_temperature,
+            **common,  # type: ignore[arg-type]
         )
     return HeuristicLLM()

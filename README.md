@@ -107,7 +107,8 @@ All settings are environment variables (see [`.env.example`](.env.example)):
 
 | Variable | Default | Options |
 |---|---|---|
-| `PMRA_LLM_PROVIDER` | `heuristic` | `openai`: any OpenAI-compatible endpoint via `OPENAI_BASE_URL` (Ollama, vLLM, xAI…) |
+| `PMRA_LLM_PROVIDER` | `heuristic` | `openai`: any OpenAI-compatible endpoint via `OPENAI_BASE_URL` (Ollama, vLLM, xAI…). `gemini`: preset for Gemini's OpenAI-compatible endpoint, using `GEMINI_API_KEY` |
+| `PMRA_LLM_MIN_INTERVAL_S` / `PMRA_LLM_MAX_RETRIES` | `0` / `6` | pacing between calls, and backoff retries on 429/5xx (honours `Retry-After`; daily-quota errors fail fast) |
 | `PMRA_EMBEDDING_PROVIDER` | `hashing` | `sentence-transformers` (`pip install .[local]`), `openai` |
 | `PMRA_VECTOR_STORE` | `qdrant` | `memory` |
 | `PMRA_QDRANT_URL` | `:memory:` | local path, or `http://qdrant:6333` / Qdrant Cloud |
@@ -144,26 +145,70 @@ recall@5 drops below the threshold and posts the forecast table to the job summa
 
 ### Results (actually run, 2026-11-21)
 
-**Forecast eval.** 30 resolved Polymarket binary markets: the highest-volume ones with an
-end date between 2025-01-01 and 2026-11-01 that had a clean 0/1 resolution and price history
-at `as_of`. Forecasts are made 7 days before close, with 315 Google News items, all published
-before their cutoff. The base rate of YES is 0.30.
-Configuration: **offline defaults** (`heuristic-lexicon` LLM, `hashing-512` embeddings).
+**Dataset.** 30 resolved Polymarket binary markets: the highest-volume ones with an end date
+between 2025-01-01 and 2026-11-01 that had a clean 0/1 resolution and price history at
+`as_of`. Forecasts are made 7 days before close. Evidence is 315 Google News headlines, all
+published before their cutoff. The base rate of YES is 0.30. Embeddings are offline
+(`hashing-512`) in every run.
+
+**Full run: all 30 markets, keyword baseline** ([`reports/heuristic/`](reports/heuristic))
 
 | Forecaster | Brier ↓ | Log loss ↓ | ECE ↓ |
 |---|---|---|---|
-| agent (heuristic-lexicon) | 0.2856 | 0.7713 | 0.2657 |
-| market price @ as_of | 0.1781 | 0.5581 | 0.1760 |
+| agent: keyword baseline (`heuristic-lexicon`) | 0.2856 | 0.7713 | 0.2657 |
+| market price 7 days before close | 0.1781 | 0.5581 | 0.1760 |
 | baseline 0.5 | 0.2500 | 0.6931 | 0.2000 |
 
-<img src="reports/calibration.png" width="420" alt="calibration plot">
+**LLM run: Gemini 2.5 Flash-Lite. ⚠️ PARTIAL: 8 of 30 markets**
+([`reports/gemini-2.5-flash-lite/`](reports/gemini-2.5-flash-lite))
 
-How to read this: the keyword heuristic does worse than a coin flip and far worse than the
-market. That is expected. It is a deterministic floor that lets the pipeline run without
-keys, and the result shows the harness can tell a weak forecaster apart. **An LLM-backed
-run (`PMRA_LLM_PROVIDER=openai`) has not been scored yet.** To produce it, run
-`PMRA_LLM_PROVIDER=openai pmra eval forecast` with a key and paste the table here. With n=30
-the confidence intervals are wide, so treat any comparison as directional.
+Run on 2026-11-21 through Gemini's OpenAI-compatible endpoint
+(`PMRA_LLM_PROVIDER=gemini`, `gemini-2.5-flash-lite`, temperature 0). It stopped after 8
+markets because the **free tier allows 20 requests per model per day**, and the agent makes
+two calls per market. The run is checkpointed in `rows.jsonl`, so re-running the same command
+after the daily reset picks up where it stopped. All rows below are scored on **the same 8
+markets** (base rate YES 0.375):
+
+| Forecaster | Brier ↓ | Log loss ↓ | ECE ↓ |
+|---|---|---|---|
+| agent: LLM (`gemini-2.5-flash-lite`) | 0.1941 | 0.5988 | 0.3538 |
+| agent: keyword baseline, same 8 markets | 0.2016 | 0.5916 | 0.3131 |
+| market price 7 days before close | 0.1313 | 0.3991 | 0.1583 |
+| baseline 0.5 | 0.2500 | 0.6931 | 0.1250 |
+
+Excluding the one market forecast before the model's training cutoff (January 2025): 7
+markets, base rate 0.29. LLM Brier 0.2215 / log loss 0.677 / ECE 0.397. Market Brier 0.1501
+/ 0.4551 / 0.1799. Keyword baseline 0.2209 / 0.6333 / 0.3207. Baseline 0.5: 0.25 / 0.6931 /
+0.2143.
+
+How to read this:
+- **Too small to conclude anything.** With n=8, a single market moves the Brier score by
+  several hundredths. On these markets the LLM beat the 50% guess on Brier and log loss, was
+  roughly tied with the keyword baseline (and worse on log loss once the pre-cutoff market is
+  dropped), and stayed clearly behind the market price. Its calibration error is high because it rarely
+  went below 0.35 on long shots that resolved NO.
+- **Training-data leakage.** A model can "remember" outcomes from before its training
+  cutoff. Gemini 2.5's cutoff is January 2025, so `--knowledge-cutoff 2025-01-31` reports the
+  post-cutoff subset separately. Newer Gemini models were deliberately not used, because
+  they have probably seen most of these outcomes.
+- An earlier attempt with `gemini-2.5-flash` hit the same 20-requests-per-day cap after about
+  11 markets. That was before checkpointing existed, so none of its rows were kept, and it is
+  not reported.
+- The keyword-baseline row for the same 8 markets was computed from
+  `reports/heuristic/rows.jsonl`. The difference from its 30-market score (0.2856) shows how
+  much the sample matters.
+
+Reproduce or finish the run (free key from [AI Studio](https://aistudio.google.com/apikey)):
+
+```bash
+export GEMINI_API_KEY=...            # never commit it
+PMRA_LLM_PROVIDER=gemini PMRA_LLM_MODEL=gemini-2.5-flash-lite PMRA_LLM_MIN_INTERVAL_S=6.5 \
+  pmra eval forecast --out reports/gemini-2.5-flash-lite --knowledge-cutoff 2025-01-31
+# score what's checkpointed so far without calling the API:
+pmra eval forecast --out reports/gemini-2.5-flash-lite --knowledge-cutoff 2025-01-31 --partial
+```
+
+<img src="reports/heuristic/calibration.png" width="380" alt="calibration: keyword baseline, all 30 markets"> <img src="reports/gemini-2.5-flash-lite/calibration.png" width="380" alt="calibration: Gemini partial, 8 markets">
 
 **Retrieval eval.** A small *hand-written synthetic* labelled set: 28 docs and 16 queries
 ([`data/eval/`](data/eval)). It is a regression smoke test, not a benchmark. Embedder: `hashing-512`.
