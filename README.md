@@ -11,6 +11,8 @@ market. Everything is exposed as a **FastAPI** service and an **MCP server**. Fo
 **back-tested against resolved markets** with Brier score, log loss and calibration, and every
 step is **traced** (Langfuse / LangSmith / OpenTelemetry).
 
+![Demo](docs/demo.gif)
+
 ![dashboard](docs/img/dashboard-research.png)
 
 > **Read-only by design.** The project only reads public market data and news. It contains
@@ -146,6 +148,10 @@ CI runs steps 2 and 3 on every push against the committed snapshot. It fails if 
 recall@5 drops below the threshold and posts the forecast table to the job summary.
 
 ### Results (actually run, 2026-11-21)
+
+**CI unit tests.** In [GitHub Actions](https://github.com/Anondevnet/polymarket-research-agent/actions/runs/45044177813) on 22 November 2026, the offline mocked-network suite was **59 passed** on Python 3.11 and **59 passed** on Python 3.12. The same workflow ran the offline retrieval eval (hybrid recall@5 gate 0.8) and the heuristic forecast eval on the committed snapshot.
+
+
 
 **Dataset.** 30 resolved Polymarket binary markets: the highest-volume ones with an end date
 between 2025-01-01 and 2026-11-01 that had a clean 0/1 resolution and price history at
