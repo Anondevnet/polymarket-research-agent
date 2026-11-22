@@ -69,3 +69,6 @@ class Forecast(BaseModel):
     evidence: EvidenceSummary = Field(default_factory=EvidenceSummary)
     citations: list[str] = Field(default_factory=list)
     as_of: datetime | None = None
+    llm: str | None = None
+    trace_id: str | None = None
+    trace_url: str | None = None

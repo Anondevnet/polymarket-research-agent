@@ -11,6 +11,8 @@ market. Everything is exposed as a **FastAPI** service and an **MCP server**. Fo
 **back-tested against resolved markets** with Brier score, log loss and calibration, and every
 step is **traced** (Langfuse / LangSmith / OpenTelemetry).
 
+![dashboard](docs/img/dashboard-research.png)
+
 > **Read-only by design.** The project only reads public market data and news. It contains
 > no wallet, signing, or order-placement code.
 
@@ -23,7 +25,7 @@ step is **traced** (Langfuse / LangSmith / OpenTelemetry).
 | **Retrieval with vector search** | Pluggable sources ([`sources/`](src/pm_research/sources)) for Google News RSS and GDELT, sentence-aware chunking ([`chunking.py`](src/pm_research/chunking.py)), configurable embeddings: offline hashing, local sentence-transformers, or OpenAI ([`embeddings.py`](src/pm_research/embeddings.py)). **Qdrant** (server, on-disk, or `:memory:`) plus a numpy fallback ([`vectorstore.py`](src/pm_research/vectorstore.py)), and **hybrid retrieval**: dense + BM25 with reciprocal-rank fusion ([`retrieval.py`](src/pm_research/retrieval.py)). |
 | **LLM evaluation & tracing** | A forecast eval against resolved Polymarket markets: Brier, log loss, ECE, and a reliability diagram ([`evals/forecast_eval.py`](src/pm_research/evals/forecast_eval.py)). A retrieval eval reporting recall@k and MRR for BM25, dense, and hybrid ([`evals/retrieval_eval.py`](src/pm_research/evals/retrieval_eval.py)). Langfuse + OpenTelemetry spans that do nothing until configured ([`tracing.py`](src/pm_research/tracing.py)), LangSmith via env, and CI that gates on an eval threshold. |
 | **Agent frameworks & MCP** | A LangGraph `StateGraph`: gather → retrieve → summarize evidence → estimate probability → compare to market ([`agent/graph.py`](src/pm_research/agent/graph.py)). An MCP server built on the official SDK with `list_markets`, `search_evidence`, and `research_market` tools ([`mcp_server.py`](src/pm_research/mcp_server.py), [docs](docs/mcp.md)). |
-| **Cloud deployment** | FastAPI service ([`api.py`](src/pm_research/api.py)), a multi-stage non-root [`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml) (API + Qdrant + MCP), and **Google Cloud Run** via [Terraform](deploy/cloudrun/terraform) (Artifact Registry, Secret Manager, a least-privilege service account, private-by-default IAM), a [`deploy.sh`](deploy/cloudrun/deploy.sh), and a [GitHub Actions deploy workflow](.github/workflows/deploy-cloudrun.yml) using Workload Identity Federation. |
+| **Cloud deployment** | FastAPI service ([`api.py`](src/pm_research/api.py)) with a built-in [web dashboard](#dashboard), a multi-stage non-root [`Dockerfile`](Dockerfile), [`docker-compose.yml`](docker-compose.yml) (API + Qdrant + MCP), and **Google Cloud Run** via [Terraform](deploy/cloudrun/terraform) (Artifact Registry, Secret Manager, a least-privilege service account, private-by-default IAM), a [`deploy.sh`](deploy/cloudrun/deploy.sh), and a [GitHub Actions deploy workflow](.github/workflows/deploy-cloudrun.yml) using Workload Identity Federation. |
 
 ---
 
@@ -225,11 +227,42 @@ or `openai` is the obvious next measurement.
 
 ---
 
+## Dashboard
+
+A small web dashboard ships with the API. It's plain HTML, CSS, and vanilla JS served by
+FastAPI, with Chart.js from a CDN, so there's no build step.
+
+```bash
+make dashboard                 # or: PMRA_SOURCES=google_news pmra serve --port 8000
+open http://localhost:8000/dashboard
+# with a real LLM (free key from AI Studio; never commit it):
+GEMINI_API_KEY=... PMRA_LLM_PROVIDER=gemini PMRA_LLM_MODEL=gemini-2.5-flash make dashboard
+```
+
+| View | What it shows |
+|---|---|
+| **Markets** | Active high-volume binary markets from the Gamma API, with YES price, volume, and end date, plus a filter |
+| **Market detail** | Hybrid-retrieved evidence (source, date, fusion score) and a **Run research** button: agent P(YES) vs market price, the edge, rationale, evidence for and against, citations, and a trace link when Langfuse or `PMRA_TRACE_URL_TEMPLATE` is set |
+| **Evals** | The committed `reports/` runs: metric tables, a post-knowledge-cutoff subset, same-sample comparisons, calibration charts drawn from per-market rows, caveats, and the retrieval eval |
+
+The header shows the active configuration (LLM, embeddings, store, sources, tracing). The
+default offline keyword baseline is labelled as such wherever it shows up.
+
+<img src="docs/img/dashboard-research.png" width="49%" alt="Market detail with evidence and a Gemini research run"> <img src="docs/img/dashboard-evals.png" width="49%" alt="Eval page with metrics, caveats and calibration charts">
+
+<sub>Left: a live research run with `gemini-2.5-flash` on 2026-11-22 (Netanyahu market:
+agent 5.0% vs market 26.7%). Right: the eval page, rendered from the committed reports.
+Markets list: [`docs/img/dashboard-markets.png`](docs/img/dashboard-markets.png).
+Regenerate with `make screenshots`.</sub>
+
 ## API
 
 | Method | Path | Description |
 |---|---|---|
+| GET | `/dashboard` | Web dashboard (`/` redirects here) |
 | GET | `/healthz` | Liveness |
+| GET | `/markets/{id}` | One market |
+| GET | `/api/evals` · `/api/config` | Eval reports and active config, used by the dashboard |
 | GET | `/markets?limit=` | Top active binary markets |
 | GET | `/markets/{id}/evidence?q=&k=` | Retrieved evidence (ingests lazily on first call) |
 | POST | `/markets/{id}/research` | `{"as_of": "2025-09-01T00:00:00Z"}` (optional) → forecast |
@@ -265,7 +298,8 @@ src/pm_research/
   llm.py, prompts.py   OpenAI-compatible chat LLM | heuristic baseline
   agent/graph.py       LangGraph state machine
   service.py           composition root used by API, MCP, CLI, evals
-  api.py               FastAPI (+ mounts MCP)
+  api.py               FastAPI (+ mounts MCP and the dashboard)
+  dashboard.py, web/   dashboard routes + static SPA (HTML/CSS/JS, Chart.js via CDN)
   mcp_server.py        MCP tools
   tracing.py           Langfuse / OTel spans (no-op by default)
   evals/               metrics, forecast eval, retrieval eval, calibration plot

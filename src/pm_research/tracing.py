@@ -126,6 +126,54 @@ def span(
         yield handle
 
 
+def current_trace_id() -> str | None:
+    """Trace id of the active span (Langfuse or OTel), or None when tracing is a no-op."""
+    if _langfuse is not None:
+        try:
+            tid = _langfuse.get_current_trace_id()
+            return str(tid) if tid else None
+        except Exception:  # pragma: no cover - defensive
+            return None
+    ctx = trace.get_current_span().get_span_context()
+    if not ctx.is_valid:
+        return None
+    return format(ctx.trace_id, "032x")
+
+
+def trace_url(trace_id: str | None) -> str | None:
+    """Link to a trace UI: Langfuse when enabled, else ``PMRA_TRACE_URL_TEMPLATE``
+    (e.g. ``http://localhost:16686/trace/{trace_id}`` for Jaeger)."""
+    if not trace_id:
+        return None
+    if _langfuse is not None:
+        try:
+            url = _langfuse.get_trace_url(trace_id=trace_id)
+            return str(url) if url else None
+        except Exception:  # pragma: no cover - defensive
+            return None
+    template = os.getenv("PMRA_TRACE_URL_TEMPLATE")
+    return template.format(trace_id=trace_id) if template else None
+
+
+def tracing_backend() -> str:
+    """Human-readable name of the active tracing backend(s), for the dashboard."""
+    init_tracing()
+    parts = []
+    if _langfuse is not None:
+        parts.append("langfuse")
+    if os.getenv("LANGSMITH_TRACING", "").lower() in {"1", "true"} and os.getenv(
+        "LANGSMITH_API_KEY"
+    ):
+        parts.append("langsmith")
+    if os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT") or os.getenv("PMRA_OTEL_CONSOLE", "").lower() in {
+        "1",
+        "true",
+        "yes",
+    }:
+        parts.append("otel")
+    return ",".join(parts) or "none"
+
+
 def flush() -> None:
     if _langfuse is not None:
         _langfuse.flush()

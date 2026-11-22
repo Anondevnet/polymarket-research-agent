@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prediction-Market Research Agent</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+  <link rel="stylesheet" href="/dashboard/static/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+  <script src="/dashboard/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/">
+      <span class="logo">◆</span>
+      <span>PM Research Agent</span>
+    </a>
+    <nav>
+      <a href="#/" data-nav="markets">Markets</a>
+      <a href="#/evals" data-nav="evals">Evals</a>
+      <a href="/docs" target="_blank" rel="noopener">API</a>
+      <a href="https://github.com/Anondevnet/polymarket-research-agent" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <div id="config" class="pills"></div>
+  </header>
+  <main id="app" aria-live="polite"></main>
+  <footer>
+    Read-only research over public Polymarket data. No trading, no wallets.
+    Not financial advice.
+  </footer>
+</body>
+</html>

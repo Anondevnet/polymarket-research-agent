@@ -64,6 +64,13 @@ def create_app(mount_mcp: bool = True) -> FastAPI:
     def markets(svc: Service, limit: int = Query(20, ge=1, le=100)) -> list[Market]:
         return svc.list_markets(limit=limit)
 
+    @app.get("/markets/{market_id}", response_model=Market)
+    def market(svc: Service, market_id: str) -> Market:
+        try:
+            return svc.get_market(market_id)
+        except (httpx.HTTPStatusError, ValueError) as exc:
+            raise HTTPException(404, str(exc)) from exc
+
     @app.get("/markets/{market_id}/evidence", response_model=list[ScoredChunk])
     def evidence(
         svc: Service, market_id: str, q: str | None = None, k: int = Query(8, ge=1, le=50)
@@ -80,6 +87,9 @@ def create_app(mount_mcp: bool = True) -> FastAPI:
         except (httpx.HTTPStatusError, ValueError) as exc:
             raise HTTPException(404, str(exc)) from exc
 
+    from .dashboard import mount_dashboard
+
+    mount_dashboard(app, get_service)
     return app
 
 

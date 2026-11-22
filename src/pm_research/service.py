@@ -18,7 +18,7 @@ from .polymarket import PolymarketClient
 from .retrieval import Retriever
 from .sources import Source, build_sources
 from .sources.base import query_from_question
-from .tracing import flush, span
+from .tracing import current_trace_id, flush, span, trace_url
 from .vectorstore import VectorStore, build_store
 
 log = logging.getLogger(__name__)
@@ -121,9 +121,12 @@ class ResearchService:
             if market_price is not None:
                 state["market_price"] = market_price
             out = self.graph.invoke(state)
+            tid = current_trace_id()
         flush()
         forecast: Forecast = out["forecast"]
-        return forecast
+        return forecast.model_copy(
+            update={"llm": self.llm.name, "trace_id": tid, "trace_url": trace_url(tid)}
+        )
 
     def research_market(self, market_id: str, as_of: datetime | None = None) -> Forecast:
         return self.research(self.get_market(market_id), as_of=as_of)

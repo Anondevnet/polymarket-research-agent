@@ -31,6 +31,7 @@ dependencies = [
 openai = ["openai>=1.30"]
 local = ["sentence-transformers>=2.7"]
 tracing = ["langfuse>=3.0", "opentelemetry-exporter-otlp-proto-http>=1.24"]
+screenshots = ["playwright>=1.40"]
 dev = ["pytest>=8", "pytest-asyncio>=0.23", "respx>=0.21", "ruff>=0.5", "mypy>=1.10"]
 all = ["pm-research-agent[openai,tracing]"]
 

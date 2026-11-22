@@ -12,3 +12,4 @@ qdrant_storage/
 .terraform/
 *.tfstate*
 reports/live/
+dashboard-shots/
