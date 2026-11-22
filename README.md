@@ -235,7 +235,9 @@ or `openai` is the obvious next measurement.
 
 ## Dashboard
 
-A small web dashboard ships with the API. It's plain HTML, CSS, and vanilla JS served by
+A small web dashboard ships with the API, styled like a printed data page: cream paper, serif
+headings, ranked lists with thin rules, and orange and green accents. It's plain HTML, CSS, and
+vanilla JS served by
 FastAPI, with Chart.js from a CDN, so there's no build step.
 
 ```bash
@@ -247,8 +249,9 @@ GEMINI_API_KEY=... PMRA_LLM_PROVIDER=gemini PMRA_LLM_MODEL=gemini-2.5-flash make
 
 | View | What it shows |
 |---|---|
-| **Markets** | Active high-volume binary markets from the Gamma API, with YES price, volume, and end date, plus a filter |
-| **Market detail** | Hybrid-retrieved evidence (source, date, fusion score) and a **Run research** button: agent P(YES) vs market price, the edge, rationale, evidence for and against, citations, and a trace link when Langfuse or `PMRA_TRACE_URL_TEMPLATE` is set |
+| **Markets** | A ranked list of active high-volume binary markets from the Gamma API, with YES price, volume, and end date, plus a filter |
+| **Research** | Pick a market to research, and see this session's recent runs (agent vs market, gap) |
+| **Market detail** | Numbered hybrid-retrieved evidence (source, date, fusion score) and a **Run research** button: *Agent X% vs Market Y%* in large numerals, the gap, rationale, evidence for and against, citations, and a trace link when Langfuse or `PMRA_TRACE_URL_TEMPLATE` is set |
 | **Evals** | The committed `reports/` runs: metric tables, a post-knowledge-cutoff subset, same-sample comparisons, calibration charts drawn from per-market rows, caveats, and the retrieval eval |
 
 The header shows the active configuration (LLM, embeddings, store, sources, tracing). The
@@ -257,9 +260,9 @@ default offline keyword baseline is labelled as such wherever it shows up.
 <img src="docs/img/dashboard-research.png" width="49%" alt="Market detail with evidence and a Gemini research run"> <img src="docs/img/dashboard-evals.png" width="49%" alt="Eval page with metrics, caveats and calibration charts">
 
 <sub>Left: a live research run with `gemini-2.5-flash` on 2026-11-22 (Netanyahu market:
-agent 5.0% vs market 26.7%). Right: the eval page, rendered from the committed reports.
+agent 8.0% vs market 28.2%). Right: the eval page, rendered from the committed reports.
 Markets list: [`docs/img/dashboard-markets.png`](docs/img/dashboard-markets.png).
-Regenerate with `make screenshots`.</sub>
+Regenerate with `make screenshots` (add `CHROME=/path/to/chrome` to use a system browser).</sub>
 
 ## API
 

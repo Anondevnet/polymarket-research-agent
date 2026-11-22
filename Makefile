@@ -15,7 +15,7 @@ serve:
 dashboard:
 	PMRA_SOURCES=$${PMRA_SOURCES:-google_news} pmra serve --port 8000
 screenshots:
-	python scripts/screenshots.py --base http://localhost:8000 --out dashboard-shots
+	python scripts/screenshots.py --base http://localhost:8000 --out $${OUT:-dashboard-shots} $(if $(CHROME),--chrome $(CHROME))
 mcp:
 	pmra mcp
 docker:

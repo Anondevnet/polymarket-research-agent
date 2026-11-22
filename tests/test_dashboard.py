@@ -28,6 +28,9 @@ def test_dashboard_page_and_assets(client: TestClient) -> None:
     page = client.get("/dashboard")
     assert page.status_code == 200 and "text/html" in page.headers["content-type"]
     assert "/dashboard/static/app.js" in page.text
+    for nav in ('data-nav="markets"', 'data-nav="research"', 'data-nav="evals"'):
+        assert nav in page.text
+    assert "Newsreader" in page.text  # editorial serif, with Georgia fallback in CSS
     for asset in ("app.js", "styles.css"):
         assert client.get(f"/dashboard/static/{asset}").status_code == 200
 

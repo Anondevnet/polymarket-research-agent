@@ -42,23 +42,26 @@ def main() -> None:
         page = browser.new_page(viewport={"width": 1440, "height": 900}, device_scale_factor=1)
 
         page.goto(f"{args.base}/dashboard#/")
-        page.wait_for_selector(".market", timeout=60_000)
+        page.wait_for_selector("#markets .ranked", timeout=60_000)
         page.screenshot(path=out / "01-markets.png")
 
         page.goto(f"{args.base}/dashboard#/market/{market}")
         page.wait_for_selector(
-            "#evidence .evidence, #evidence .muted, #evidence .error", timeout=120_000
+            "#evidence .ranked, #evidence .empty, #evidence .error", timeout=120_000
         )
         page.screenshot(path=out / "02-market-evidence.png", full_page=True)
 
         if not args.no_research:
             page.click("#run")
-            page.wait_for_selector("#result .compare, #result .error", timeout=300_000)
+            page.wait_for_selector("#result .verdict, #result .error", timeout=300_000)
             page.screenshot(path=out / "03-research-result.png", full_page=True)
+            page.goto(f"{args.base}/dashboard#/research")
+            page.wait_for_selector("#pick option[value]", state="attached", timeout=60_000)
+            page.screenshot(path=out / "05-research-hub.png", full_page=True)
 
         page.goto(f"{args.base}/dashboard#/evals")
         page.wait_for_selector("canvas", timeout=60_000)
-        page.wait_for_timeout(1200)  # let Chart.js finish its animation
+        page.wait_for_timeout(800)  # let Chart.js finish its animation
         page.screenshot(path=out / "04-evals.png", full_page=True)
         browser.close()
     print(f"market {market}: wrote", sorted(str(f) for f in out.glob("*.png")))

@@ -3,30 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prediction-Market Research Agent</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+  <title>PM Research Agent</title>
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23faf6ef'/><text x='50' y='72' font-size='68' text-anchor='middle' font-family='Georgia,serif' fill='%23e8590c'>P</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="/dashboard/static/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
   <script src="/dashboard/static/app.js" defer></script>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#/">
-      <span class="logo">◆</span>
-      <span>PM Research Agent</span>
-    </a>
-    <nav>
-      <a href="#/" data-nav="markets">Markets</a>
-      <a href="#/evals" data-nav="evals">Evals</a>
-      <a href="/docs" target="_blank" rel="noopener">API</a>
-      <a href="https://github.com/Anondevnet/polymarket-research-agent" target="_blank" rel="noopener">GitHub</a>
-    </nav>
-    <div id="config" class="pills"></div>
+  <a class="skip" href="#app">Skip to content</a>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="brand" href="#/">PM Research Agent</a>
+      <nav aria-label="Primary">
+        <a href="#/" data-nav="markets">Markets</a>
+        <a href="#/research" data-nav="research">Research</a>
+        <a href="#/evals" data-nav="evals">Evals</a>
+      </nav>
+      <div class="masthead-links">
+        <a href="/docs" target="_blank" rel="noopener">API</a>
+        <a href="https://github.com/Anondevnet/polymarket-research-agent" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div id="config" class="config-strip" aria-label="Active configuration"></div>
   </header>
-  <main id="app" aria-live="polite"></main>
+  <main id="app" tabindex="-1" aria-live="polite"></main>
   <footer>
-    Read-only research over public Polymarket data. No trading, no wallets.
-    Not financial advice.
+    Read-only research over public Polymarket data. No trading, no wallets. Not financial advice.
   </footer>
 </body>
 </html>
