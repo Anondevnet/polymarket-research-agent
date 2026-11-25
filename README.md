@@ -1,8 +1,10 @@
 # Prediction-Market Research Agent
 
 [![CI](https://github.com/Anondevnet/polymarket-research-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Anondevnet/polymarket-research-agent/actions/workflows/ci.yml)
-![python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
-![license](https://img.shields.io/badge/license-MIT-green)
+[![Python 3.11 | 3.12](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+A read-only LangGraph agent that researches Polymarket questions with hybrid RAG over news, estimates P(YES) without seeing the market price, and back-tests those forecasts against resolved markets, so the model's calibration is measured instead of assumed.
 
 An evidence-grounded research agent for [Polymarket](https://polymarket.com) prediction markets.
 It ingests news into a vector store, runs a **LangGraph** agent that weighs evidence for and
@@ -17,6 +19,20 @@ step is **traced** (Langfuse / LangSmith / OpenTelemetry).
 
 > **Read-only by design.** The project only reads public market data and news. It contains
 > no wallet, signing, or order-placement code.
+
+## Quickstart
+
+Offline by default: the `heuristic` LLM and `hashing` embeddings need no API keys.
+
+```bash
+git clone https://github.com/Anondevnet/polymarket-research-agent && cd polymarket-research-agent
+python3.11 -m venv .venv && source .venv/bin/activate && pip install -e ".[dev,all]"
+pytest                                  # 59 offline tests, network mocked
+pmra eval retrieval --out reports       # offline retrieval eval: BM25 vs dense vs hybrid
+pmra serve                              # http://localhost:8080/docs (MCP at /mcp/)
+```
+
+Live market commands, Docker, and configuration are in [Setup and usage](#setup-and-usage).
 
 ---
 
@@ -84,7 +100,7 @@ computes `edge = p_agent − p_market`.
 
 ---
 
-## Quickstart
+## Setup and usage
 
 ```bash
 git clone https://github.com/Anondevnet/polymarket-research-agent && cd polymarket-research-agent
